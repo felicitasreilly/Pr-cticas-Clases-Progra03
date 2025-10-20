@@ -1,38 +1,41 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 
-export default function DynamicForm() {
-  const [comentario, setComentario] = useState('');
+class DynamicForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            comentario: ''
+        };
+    }
+    onSubmit = () => {
+        console.log('Comentario enviado:', this.state.comentario);
+    };
 
-  const onSubmit = () => {
-    console.log('Comentario enviado:', comentario);
-  };
+    render() {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.title}>Dejá tu comentario</Text>
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dejá tu comentario</Text>
-
-      <TextInput
-        style={styles.field}
-        placeholder="Escribí tu comentario aquí..."
-        multiline={true}
-        numberOfLines={4}
-        value={comentario}
-        onChangeText={text => setComentario(text)}
-      />
-
-      <Pressable onPress={onSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>Enviar</Text>
-      </Pressable>
-
-
-      <View style={styles.dataPreview}>
-        <Text style={styles.previewTitle}>Vista previa:</Text>
-        <Text>{comentario}</Text>
-      </View>
-    </View>
-  );
+                <TextInput
+                    style={styles.field}
+                    placeholder="Escribí tu comentario aquí..."
+                    value={this.state.comentario}
+                    onChangeText={text => this.setState({ comentario: text })}
+                />
+                <Pressable onPress={this.onSubmit} style={styles.button}>
+                    <Text style={styles.buttonText}>Enviar</Text>
+                </Pressable>
+                <View style={styles.dataPreview}>
+                    <Text style={styles.previewTitle}>Vista previa:</Text>
+                    <Text>{this.state.comentario}</Text>
+                </View>
+            </View>
+        );
+    }
 }
+
+export default DynamicForm;
 
 const styles = StyleSheet.create({
   container: {
