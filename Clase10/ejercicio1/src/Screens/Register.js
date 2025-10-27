@@ -11,19 +11,29 @@ class Register extends Component {
       password: '',
     };
   }
-  onSubmit(){
-    const { username, email, password } = this.state;
-    console.log('Datos del registro:', { username, email, password });
+  onSubmit() {
+    const { email, username, password } = this.state;
+    console.log('Datos de registro:', { email, username, password });
     auth
     .createUserWithEmailAndPassword(email, password)
-    .then((res) => {
-      this.props.navigation.navigate('Login'); //para redirigir a login
-      })
-      .catch((error) => {
-        console.log(error);
+    .then(() => { // guardar en Firestore sin return: anidado
+    db.collection('users').add({
+      email: auth.currentUser.email,
+      username: username,
+      createdAt: Date.now(),
+    })
+    .then(() => {
+      this.props.navigation.navigate('Login');
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  }
-  render() {
+})
+.catch((error) => {
+console.log(error);
+});
+}
+render() {
     return (
     <View style={styles.container}>
       <Text style={styles.title}>Registro</Text>
